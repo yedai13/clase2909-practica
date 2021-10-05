@@ -13,6 +13,7 @@ namespace WebApplication4.Controllers
             return View();
         }
 
+        [HttpPost]
         public IActionResult Registrar(Usuario usuario)
         {
             //TODO: Validar que el estado del model esté ok.
@@ -22,13 +23,15 @@ namespace WebApplication4.Controllers
                 if (_servicio.ValidarSiExisteElUsuario(usuario)) {
 
                     //TODO: Si no está registrado, registrar usuario.
-                    _servicio.Registrar(usuario);
-
                     //TODO: Definir hacia donde quiero llevar al usuario a nivel vistas.
+                    ModelState.AddModelError(string.Empty, "El username/email ya estan en uso");
+                    return View();
                 }
+
+                _servicio.Registrar(usuario);
             }
 
-            return View();
+            return RedirectToAction("Login", "Home");
         }
     }
 }
